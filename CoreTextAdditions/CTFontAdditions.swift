@@ -8,7 +8,7 @@
 
 import Foundation
 import CoreText
-import FoundationAdditions
+import SwiftAdditions
 #if SWIFT_PACKAGE
 import CTAdditionsSwiftHelpers
 #endif

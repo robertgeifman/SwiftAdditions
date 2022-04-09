@@ -14,7 +14,6 @@ import AppKit.NSWorkspace
 import AppKit.NSImage
 #endif
 import CoreGraphics
-import FoundationAdditions
 
 
 /// Converts an `OSType` to a `String` value. May return `nil`.

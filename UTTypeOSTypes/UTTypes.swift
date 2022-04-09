@@ -9,6 +9,7 @@
 import Foundation
 import UniformTypeIdentifiers
 
+@available(macOS 11.0, *)
 public extension UTTagClass {
 	/**
 	 The tag class for Mac OS type codes such as `"TEXT"`.
@@ -20,6 +21,7 @@ public extension UTTagClass {
 	}
 }
 
+@available(macOS 11.0, *)
 public extension UTType {
 	/**
 	 If available, the preferred (first available) tag of class

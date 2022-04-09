@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import FoundationAdditions
+import SwiftAdditions
 import IOKit.hid
 
 extension IOHIDDevice: CFTypeProtocol {

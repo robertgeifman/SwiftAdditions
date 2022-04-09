@@ -7,9 +7,6 @@ let package = Package(
     name: "SwiftAdditions",
     products: [
         // Products define the executables and libraries produced by a package, and make them visible to other packages.
-		.library(
-			name: "FoundationAdditions",
-			targets: ["FoundationAdditions"]),
         .library(
             name: "SwiftAdditions",
             targets: ["SwiftAdditions"]),
@@ -23,8 +20,8 @@ let package = Package(
 		   name: "TISAdditions",
 		   targets: ["TISAdditions"]),
 		.library(
-		   name: "UTTypeOSTypesTests",
-		   targets: ["UTTypeOSTypesTests"]),
+		   name: "UTTypeOSTypes",
+		   targets: ["UTTypeOSTypes"]),
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
@@ -35,7 +32,7 @@ let package = Package(
         // Targets can depend on other targets in this package, and on products in packages which this package depends on.
         .target(
             name: "SwiftAdditions",
-            dependencies: ["FoundationAdditions"],
+            dependencies: [],
             path: "SwiftAdditions",
             exclude: ["SAMacError.m"]),
         .testTarget(
@@ -44,7 +41,7 @@ let package = Package(
             path: "SwiftAdditionsTests"),
         .target(
             name: "SwiftAudioAdditions",
-            dependencies: ["FoundationAdditions", "SwiftAdditions"],
+            dependencies: ["SwiftAdditions"],
             path: "SwiftAudioAdditions",
             exclude: ["SAAError.m"]),
         .testTarget(
@@ -53,30 +50,22 @@ let package = Package(
             path: "SwiftAudioAdditionsTests"),
         .target(
             name: "CoreTextAdditions",
-            dependencies: ["FoundationAdditions", "CTAdditionsSwiftHelpers"],
+            dependencies: ["CTAdditionsSwiftHelpers"],
             path: "CoreTextAdditions"),
 		.target(
 			name: "CTAdditionsSwiftHelpers",
 			path: "CTAdditionsSwiftHelpers"),
         .testTarget(
             name: "CoreTextAdditionsTests",
-            dependencies: ["SwiftAdditions", "FoundationAdditions", "CoreTextAdditions"],
+            dependencies: ["SwiftAdditions", "CoreTextAdditions"],
             path: "CoreTextAdditionsTests"),
-        .target(
-            name: "FoundationAdditions",
-            dependencies: [],
-            path: "FoundationAdditions"),
-        .testTarget(
-            name: "FoundationAdditionsTests",
-            dependencies: ["SwiftAdditions", "FoundationAdditions"],
-            path: "FoundationAdditionsTests"),
 		.target(
 			name: "TISAdditions",
-			dependencies: ["SwiftAdditions", "FoundationAdditions"],
+			dependencies: ["SwiftAdditions"],
 			path: "TISAdditions"),
 		.testTarget(
 			name: "TISAdditionsTests",
-			dependencies: ["SwiftAdditions", "FoundationAdditions", "TISAdditions"],
+			dependencies: ["SwiftAdditions", "TISAdditions"],
 			path: "TISAdditionsTests"),
 		.target(
 			name: "UTTypeOSTypes",

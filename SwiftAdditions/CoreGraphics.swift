@@ -8,7 +8,6 @@
 
 import Foundation
 import CoreGraphics
-import FoundationAdditions
 
 public extension CGBitmapInfo {
 	/// The alpha info of the current `CGBitmapInfo`.

@@ -8,7 +8,7 @@
 
 import Foundation
 import Carbon.HIToolbox
-import FoundationAdditions
+import SwiftAdditions
 import SwiftAdditions
 
 #if !os(OSX)
