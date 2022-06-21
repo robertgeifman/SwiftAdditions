@@ -206,6 +206,7 @@ public enum FontManager {
 	/// - parameter fileURL: A file system URL referencing a valid font file.
 	/// - returns: An array of `CTFontDescriptor`s or `nil` if there are no valid fonts.
 	@available(OSX 10.6, iOS 7.0, watchOS 2.0, tvOS 9.0, *)
+	@_disfavoredOverload
 	public static func fontDescriptors(from fileURL: URL) -> [CTFontDescriptor]? {
 		return CTFontManagerCreateFontDescriptorsFromURL(fileURL as NSURL) as NSArray? as? [CTFontDescriptor]
 	}
@@ -219,6 +220,7 @@ public enum FontManager {
 	/// If the data contains a font collection (TTC or OTC), only the first font in the collection will be
 	/// returned.
 	@available(OSX 10.7, iOS 7.0, watchOS 2.0, tvOS 9.0, *)
+	@_disfavoredOverload
 	public static func fontDescriptor(from data: Data) -> CTFontDescriptor? {
 		return CTFontManagerCreateFontDescriptorFromData(data as NSData)
 	}
@@ -230,6 +232,7 @@ public enum FontManager {
 	/// - returns: An array of font descriptors. This can be an empty array in the event of
 	/// invalid or unsupported font data.
 	@available(OSX 10.13, iOS 11.0, watchOS 4.0, tvOS 11.0, *)
+	@_disfavoredOverload
 	public static func fontDescriptors(from data: Data) -> [CTFontDescriptor] {
 		return CTFontManagerCreateFontDescriptorsFromData(data as NSData) as! [CTFontDescriptor]
 	}
