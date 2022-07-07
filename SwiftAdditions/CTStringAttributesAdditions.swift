@@ -10,7 +10,6 @@ import Foundation
 import CoreText
 
 extension NSAttributedString.Key {
-	
 	/// Namespace of CoreText attributed string keys.
 	///
 	/// Note that these may overlap *or* be different than the ones provided by AppKit/UIKit.

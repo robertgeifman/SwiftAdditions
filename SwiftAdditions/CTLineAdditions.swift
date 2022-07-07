@@ -21,6 +21,98 @@ public extension CTLine {
 	/// requested.
 	typealias TruncationType = CTLineTruncationType
 	
+	/// Returns the total glyph count for the line object.
+	///
+	/// The total glyph count is equal to the sum of all of the glyphs in
+	/// the glyph runs forming the line.
+	@inlinable var glyphCount: Int {
+		return CTLineGetGlyphCount(self)
+	}
+
+	/// Returns the array of glyph runs that make up the line object.
+	///
+	/// An `Array` containing the `CTRun` objects that make up the line.
+	var glyphRuns: [CTRun] {
+		return CTLineGetGlyphRuns(self) as! [CTRun]
+	}
+
+	/// Gets the range of characters that originally spawned the glyphs
+	/// in the line.
+	///
+	/// A `CFRange` that contains the range over the backing store string
+	/// that spawned the glyphs. If the function fails for any reason, an
+	/// empty range will be returned.
+	@inlinable var stringRange: CFRange {
+		return CTLineGetStringRange(self)
+	}
+
+	// MARK: - Line Measurement
+	/* --------------------------------------------------------------------------- */
+	/* Line Measurement */
+	/* --------------------------------------------------------------------------- */
+
+	/// Calculates the typographic bounds for a line.
+	///
+	/// A line's typographic width is the distance to the rightmost
+	/// glyph advance width edge. Note that this distance includes
+	/// trailing whitespace glyphs.
+	var typographicBounds: (width: Double, ascent: CGFloat, descent: CGFloat, leading: CGFloat) {
+		var asc: CGFloat = 0
+		var des: CGFloat = 0
+		var lead: CGFloat = 0
+		let width = CTLineGetTypographicBounds(self, &asc, &des, &lead)
+		return (width, asc, des, lead)
+	}
+
+	/// Calculates the trailing whitespace width for a line.
+	/// - returns: The width of the line's trailing whitespace. If line is invalid,
+	/// this function will always return zero.
+	///
+	/// Creating a line for a width can result in a line that is
+	/// actually longer than the desired width due to trailing
+	/// whitespace. Normally this is not an issue due to whitespace being
+	/// invisible, but this function may be used to determine what amount
+	/// of a line's width is due to trailing whitespace.
+	@inlinable var trailingWhitespaceWidth: Double {
+		return CTLineGetTrailingWhitespaceWidth(self)
+	}
+
+	/// Calculates the bounds for a line.
+	/// - parameter options: Desired options or `[]` if none.
+	/// - returns: The bounds of the line as specified by the type and options,
+	/// such that the coordinate origin is coincident with the line
+	/// origin and the rect origin is at the bottom left. If the line
+	/// is invalid, this function will return `nil`.
+	func bounds(with options: BoundsOptions = []) -> CGRect? {
+		let retVal = CTLineGetBoundsWithOptions(self, options)
+		if retVal.isNull {
+			return nil
+		}
+		return retVal
+	}
+
+	/// Calculates the image bounds for a line.
+	/// - parameter context:
+	/// The context which the image bounds will be calculated for or `nil`,
+	/// in which case the bounds are relative to `CGPoint.zero`.
+	/// - returns: A rectangle that tightly encloses the paths of the line's glyphs,
+	/// which will be translated by the supplied context's text position.
+	/// If the line is invalid, `nil` will be returned.
+	///
+	/// The image bounds for a line is the union of all non-empty glyph
+	/// bounding rects, each positioned as it would be if drawn using
+	/// CTLineDraw using the current context. Note that the result is
+	/// ideal and does not account for raster coverage due to rendering.
+	/// This function is purely a convenience for using glyphs as an
+	/// image and should not be used for typographic purposes.
+	func imageBounds(in context: CGContext?) -> CGRect? {
+		let retVal = CTLineGetImageBounds(self, context)
+		if retVal.isNull {
+			return nil
+		}
+		return retVal
+	}
+
 	/// Creates a truncated line from an existing line.
 	/// - parameter width:
 	/// The width at which truncation will begin. The line will be
@@ -60,31 +152,6 @@ public extension CTLine {
 		return CTLineCreateJustifiedLine(self, justificationFactor, justificationWidth)
 	}
 	
-	/// Returns the total glyph count for the line object.
-	///
-	/// The total glyph count is equal to the sum of all of the glyphs in
-	/// the glyph runs forming the line.
-	@inlinable var glyphCount: Int {
-		return CTLineGetGlyphCount(self)
-	}
-	
-	/// Returns the array of glyph runs that make up the line object.
-	///
-	/// An `Array` containing the `CTRun` objects that make up the line.
-	var glyphRuns: [CTRun] {
-		return CTLineGetGlyphRuns(self) as! [CTRun]
-	}
-	
-	/// Gets the range of characters that originally spawned the glyphs
-	/// in the line.
-	///
-	/// A `CFRange` that contains the range over the backing store string
-	/// that spawned the glyphs. If the function fails for any reason, an
-	/// empty range will be returned.
-	@inlinable var stringRange: CFRange {
-		return CTLineGetStringRange(self)
-	}
-	
 	/// Gets the pen offset required to draw flush text.
 	/// - parameter flushFactor:
 	/// Specifies what kind of flushness you want. A `flushFactor` of `0` or
@@ -100,6 +167,10 @@ public extension CTLine {
 		return CTLineGetPenOffsetForFlush(self, flushFactor, flushWidth)
 	}
 	
+	@inlinable static func create(with attributedString: CFAttributedString) -> CTLine {
+		return CTLineCreateWithAttributedString(attributedString)
+	}
+
 	/// Draws a line.
 	///
 	/// This is a convenience call, since the line could be drawn
@@ -111,73 +182,6 @@ public extension CTLine {
 	/// - parameter context: The context to which the line will be drawn.
 	@inlinable func draw(in context: CGContext) {
 		CTLineDraw(self, context)
-	}
-	
-	// MARK: - Line Measurement
-	/* --------------------------------------------------------------------------- */
-	/* Line Measurement */
-	/* --------------------------------------------------------------------------- */
-	
-	/// Calculates the typographic bounds for a line.
-	///
-	/// A line's typographic width is the distance to the rightmost
-	/// glyph advance width edge. Note that this distance includes
-	/// trailing whitespace glyphs.
-	var typographicBounds: (width: Double, ascent: CGFloat, descent: CGFloat, leading: CGFloat) {
-		var asc: CGFloat = 0
-		var des: CGFloat = 0
-		var lead: CGFloat = 0
-		let width = CTLineGetTypographicBounds(self, &asc, &des, &lead)
-		return (width, asc, des, lead)
-	}
-	
-	/// Calculates the bounds for a line.
-	/// - parameter options: Desired options or `[]` if none.
-	/// - returns: The bounds of the line as specified by the type and options,
-	/// such that the coordinate origin is coincident with the line
-	/// origin and the rect origin is at the bottom left. If the line
-	/// is invalid, this function will return `nil`.
-	func bounds(with options: BoundsOptions = []) -> CGRect? {
-		let retVal = CTLineGetBoundsWithOptions(self, options)
-		if retVal.isNull {
-			return nil
-		}
-		return retVal
-	}
-
-	/// Calculates the trailing whitespace width for a line.
-	/// - returns: The width of the line's trailing whitespace. If line is invalid,
-	/// this function will always return zero.
-	///
-	/// Creating a line for a width can result in a line that is
-	/// actually longer than the desired width due to trailing
-	/// whitespace. Normally this is not an issue due to whitespace being
-	/// invisible, but this function may be used to determine what amount
-	/// of a line's width is due to trailing whitespace.
-	@inlinable var trailingWhitespaceWidth: Double {
-		return CTLineGetTrailingWhitespaceWidth(self)
-	}
-	
-	/// Calculates the image bounds for a line.
-	/// - parameter context:
-	/// The context which the image bounds will be calculated for or `nil`,
-	/// in which case the bounds are relative to `CGPoint.zero`.
-	/// - returns: A rectangle that tightly encloses the paths of the line's glyphs,
-	/// which will be translated by the supplied context's text position.
-	/// If the line is invalid, `nil` will be returned.
-	///
-	/// The image bounds for a line is the union of all non-empty glyph
-	/// bounding rects, each positioned as it would be if drawn using
-	/// CTLineDraw using the current context. Note that the result is
-	/// ideal and does not account for raster coverage due to rendering.
-	/// This function is purely a convenience for using glyphs as an
-	/// image and should not be used for typographic purposes.
-	func imageBounds(in context: CGContext?) -> CGRect? {
-		let retVal = CTLineGetImageBounds(self, context)
-		if retVal.isNull {
-			return nil
-		}
-		return retVal
 	}
 	
 	// MARK: - Line Caret Positioning and Highlighting

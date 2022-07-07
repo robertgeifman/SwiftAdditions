@@ -10,7 +10,19 @@ import Foundation
 import CoreText
 
 public extension CTFramesetter {
-	/// Creates a framesetter directly from a typesetter.
+		/// Returns the typesetter object being used by the framesetter.
+	///
+	/// Each framesetter uses a typesetter internally to perform
+	/// line breaking and other contextual analysis based on the
+	/// characters in a string; this function returns the typesetter
+	/// being used by a particular framesetter if the caller would
+	/// like to perform other operations on that typesetter.
+	@inlinable var typesetter: CTTypesetter {
+		return CTFramesetterGetTypesetter(self)
+	}
+
+
+/// Creates a framesetter directly from a typesetter.
 	///
 	/// Each framesetter uses a typesetter internally to perform
 	/// line breaking and other contextual analysis based on the
@@ -55,17 +67,6 @@ public extension CTFramesetter {
 	/// - returns: This function will return a reference to a new `CTFrame` object.
 	@inlinable func frame(withStringRange stringRange: CFRange, path: CGPath, frameAttributes: CFDictionary? = nil) -> CTFrame {
 		return CTFramesetterCreateFrame(self, stringRange, path, frameAttributes)
-	}
-	
-	/// Returns the typesetter object being used by the framesetter.
-	///
-	/// Each framesetter uses a typesetter internally to perform
-	/// line breaking and other contextual analysis based on the
-	/// characters in a string; this function returns the typesetter
-	/// being used by a particular framesetter if the caller would
-	/// like to perform other operations on that typesetter.
-	@inlinable var typesetter: CTTypesetter {
-		return CTFramesetterGetTypesetter(self)
 	}
 	
 	// MARK: - Frame Sizing
