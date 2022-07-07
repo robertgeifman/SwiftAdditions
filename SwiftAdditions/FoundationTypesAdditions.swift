@@ -8,7 +8,7 @@
 
 import Foundation
 #if !os(OSX)
-	import UIKit
+	import AppKit
 #endif
 
 public extension NSRange {

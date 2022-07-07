@@ -101,6 +101,15 @@ public func runOnMainThreadAsync(_ block: @escaping () -> Void) {
 
 // Code taken from http://stackoverflow.com/a/33957196/1975001
 public extension Dictionary {
+	subscript(key: Key, defaultValue: @autoclosure () -> Value) -> Value {
+		mutating get {
+			if let value = self[key] { return value }
+			let value = defaultValue()
+			self[key] = value
+			return value
+		}
+	}
+
 	@inlinable mutating func formUnion(_ dictionary: Dictionary) {
 		if capacity < count + dictionary.count {
 			reserveCapacity(count + dictionary.count)

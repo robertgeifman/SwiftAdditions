@@ -925,7 +925,7 @@ public enum CarbonGenericFinderIcons: OSType, OSTypeConvertable, OSTypeIconConve
 	case controlStripModule = 0x73646576
 	case component = 0x74686e67
 	case deskAccessory = 0x41505044
-	case document = 0x646f6375
+	case library = 0x646f6375
 	case editionFile = 0x65647466
 	case `extension` = 0x494e4954
 	case fileServer = 0x73727672

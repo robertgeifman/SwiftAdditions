@@ -1,10 +1,11 @@
-// swift-tools-version:4.0
-// The swift-tools-version declares the minimum version of Swift required to build this package.
-
+// swift-tools-version:5.3
 import PackageDescription
 
 let package = Package(
     name: "SwiftAdditions",
+	platforms: [
+		.macOS("11.0"), .iOS(.v13), .tvOS(.v13), .watchOS(.v5),
+	],
     products: [
         .library(
            name: "SwiftAdditions",
