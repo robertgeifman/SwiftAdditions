@@ -9,6 +9,13 @@
 import Foundation
 import CoreText
 
+public struct TypographicBounds {
+	let width: Double
+	let ascent: CGFloat
+	let descent: CGFloat
+	let leading: CGFloat
+}
+
 public extension CTRun {
 	/// A bitfield passed back by the `CTRun.status` getter that is used to indicate the disposition of the
 	/// run.
@@ -219,10 +226,10 @@ public extension CTRun {
 	/// a location of `0` and a length of `CTRun.glyphCount`. If the length
 	/// of the range is set to `0`, then the operation will continue from
 	/// the range's start index to the end of the run.
-	func typographicBounds(in range: CFRange) -> (width: Double, ascent: CGFloat, descent: CGFloat, leading: CGFloat) {
+	func typographicBounds(in range: CFRange) -> TypographicBounds {
 		var ascent: CGFloat = 0, descent: CGFloat = 0, leading: CGFloat = 0
 		let width = CTRunGetTypographicBounds(self, range, &ascent, &descent, &leading)
-		return (width, ascent, descent, leading)
+		return TypographicBounds(width: width, ascent: ascent, descent: descent, leading: leading)
 	}
 	
 	/// Calculates the image bounds for a glyph range.
@@ -318,7 +325,7 @@ public extension CTRun {
 	/// a location of `0` and a length of `CTRun.glyphCount`. If the length
 	/// of the range is set to `0`, then the operation will continue from
 	/// the range's start index to the end of the run.
-	func typographicBounds(in range: NSRange) -> (width: Double, ascent: CGFloat, descent: CGFloat, leading: CGFloat) {
+	func typographicBounds(in range: NSRange) -> TypographicBounds {
 		return typographicBounds(in: range.cfRange)
 	}
 
@@ -328,7 +335,7 @@ public extension CTRun {
 	/// a location of `0` and a length of `CTRun.glyphCount`. If the length
 	/// of the range is set to `0`, then the operation will continue from
 	/// the range's start index to the end of the run.
-	func typographicBounds(in range: Range<Int>) -> (width: Double, ascent: CGFloat, descent: CGFloat, leading: CGFloat) {
+	func typographicBounds(in range: Range<Int>) -> TypographicBounds {
 		return typographicBounds(in: NSRange(range).cfRange)
 	}
 

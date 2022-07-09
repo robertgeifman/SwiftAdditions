@@ -56,12 +56,12 @@ public extension CTLine {
 	/// A line's typographic width is the distance to the rightmost
 	/// glyph advance width edge. Note that this distance includes
 	/// trailing whitespace glyphs.
-	var typographicBounds: (width: Double, ascent: CGFloat, descent: CGFloat, leading: CGFloat) {
+	var typographicBounds: TypographicBounds {
 		var asc: CGFloat = 0
 		var des: CGFloat = 0
 		var lead: CGFloat = 0
 		let width = CTLineGetTypographicBounds(self, &asc, &des, &lead)
-		return (width, asc, des, lead)
+		return TypographicBounds(width: width, ascent: asc, descent: des, leading: lead)
 	}
 
 	/// Calculates the trailing whitespace width for a line.
